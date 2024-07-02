@@ -1,0 +1,12 @@
+{
+  "name": "jornada-backend-julho-2024",
+  "version": "1.0.0",
+  "description": "Projeto Backend Julho/24",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
