@@ -36,14 +36,17 @@ async function main() {
   })
   //Sinalizar para o Express que vamos usar o JSON no Body
   app.use(express.json())
+
   // Create - [POST] /item
-  app.post('/item', function (req, res) {
+  app.post('/item', async function (req, res) {
+//Obtemos o objeto inteiro enviando o Request Body
+    const item = req.body
 
-    const item = req.body.nome
+// Inserimos o item na collection
+    await collection.insertOne(item)
 
-    lista.push(item)
-
-    res.send('Item criado com sucesso')
+// Exibe o item que foi adicionado
+res.send(item)
   })
 
   // Read By Id - [GET] /item/:id
