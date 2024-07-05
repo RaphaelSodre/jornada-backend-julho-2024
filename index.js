@@ -1,57 +1,72 @@
 const express = require('express')
+const { MongoClient } = require('mongodb')
 const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
-app.get('/oi', function (req, res) {
-  res.send('Olá Mundo!!')
-})
+const dbUrl = 'mongodb+srv://admin:19NvKD5BTmQ5ljks@cluster0.b4hrgfd.mongodb.net/'
+const dbName = 'ocean-jornada-backend'
 
-// Lista de Personagens
-const lista = ['Rick Sanches', 'Morty Smith', 'Summer Smith']
+const client = new MongoClient(dbUrl)
 
-// Read All - [GET] /item
-app.get('/item', function (req, res) {
-  res.send(lista)
-})
-//Sinalizar para o Express que vamos usar o JSON no Body
-app.use(express.json())
-// Create - [POST] /item
-app.post('/item', function (req, res) {
+async function main() {
+  console.log('Conectando ao banco de dados')
+  await client.connect()
+  console.log('Banco de dados conectado com sucesso')
 
-  const item = req.body.nome 
 
-  lista.push(item)
+  app.get('/', function (req, res) {
+    res.send('Hello World!')
+  })
+  app.get('/oi', function (req, res) {
+    res.send('Olá Mundo!!')
+  })
 
-res.send('Item criado com sucesso')
-})
+  // Lista de Personagens
+  const lista = ['Rick Sanches', 'Morty Smith', 'Summer Smith']
 
-// Read By Id - [GET] /item/:id
-app.get('/item/:id', function (req, res) {
-  // Acessamos o parâmetro de rota ID
-  const id = req.params.id
+  // Read All - [GET] /item
+  app.get('/item', function (req, res) {
+    res.send(lista)
+  })
+  //Sinalizar para o Express que vamos usar o JSON no Body
+  app.use(express.json())
+  // Create - [POST] /item
+  app.post('/item', function (req, res) {
 
-  // Acessamos o item na lista pelo índice corrigido (id - 1)
-  const item = lista[id - 1]
+    const item = req.body.nome
 
-  //Enviamos o item obtido como resposta
-  res.send(item)
+    lista.push(item)
 
-})
+    res.send('Item criado com sucesso')
+  })
 
-// Update - [PUT] /item/:id
-app.put('/item/:id', function (req, res){
-// Acessamos o ID do parâmetro de rota
-const id = req.params.id
+  // Read By Id - [GET] /item/:id
+  app.get('/item/:id', function (req, res) {
+    // Acessamos o parâmetro de rota ID
+    const id = req.params.id
 
-// Acessamos o body da requisição, com os dados a serem atualizados
-const novoItem = req.body.nome
+    // Acessamos o item na lista pelo índice corrigido (id - 1)
+    const item = lista[id - 1]
 
-// Atualizamos a lista com a nova informação
-lista[id - 1] = novoItem
+    //Enviamos o item obtido como resposta
+    res.send(item)
 
-  res.send('Item atualizado com sucesso' + id)
-})
+  })
 
-app.listen(3000)
+  // Update - [PUT] /item/:id
+  app.put('/item/:id', function (req, res) {
+    // Acessamos o ID do parâmetro de rota
+    const id = req.params.id
+
+    // Acessamos o body da requisição, com os dados a serem atualizados
+    const novoItem = req.body.nome
+
+    // Atualizamos a lista com a nova informação
+    lista[id - 1] = novoItem
+
+    res.send('Item atualizado com sucesso' + id)
+  })
+
+  app.listen(3000)
+}
+
+main()
